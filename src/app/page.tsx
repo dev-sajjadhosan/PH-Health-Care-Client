@@ -1,11 +1,13 @@
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <div className="flex flex-col gap-4 items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold">Home</h1>
-      <p className="text-xl">Welcome to PH HealthCare Management System</p>
-      <Button>Hello World</Button>
+      <h1 className="text-4xl">Welcome to</h1>
+      <p className="text-4xl text-center font-medium">
+        PH HealthCare Management
+      </p>
+      {/* <Button>Hello World</Button> */}
     </div>
   );
 }
