@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ApiResponse } from "@/types/api.types";
 import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -24,9 +25,13 @@ export interface ApiRequestOptions {
   data?: any;
 }
 
-const httpGet = async (endPoint: string, options?: ApiRequestOptions) => {
+const httpGet = async <TData>(
+  endPoint: string,
+  options?: ApiRequestOptions,
+): Promise<ApiResponse<TData>> => {
   try {
-    const response = await axiosInstance().get(endPoint, options);
+    const instance = axiosInstance();
+    const response = await instance.get<ApiResponse<TData>>(endPoint, options);
     return response.data;
   } catch (error) {
     console.error(`Get request to ${endPoint} failed:`, error);
@@ -34,9 +39,18 @@ const httpGet = async (endPoint: string, options?: ApiRequestOptions) => {
   }
 };
 
-const httpPost = async (endPoint: string, options?: ApiRequestOptions) => {
+const httpPost = async <TData>(
+  endPoint: string,
+  data: unknown,
+  options?: ApiRequestOptions,
+): Promise<ApiResponse<TData>> => {
   try {
-    const response = await axiosInstance().post(endPoint, options);
+    const instance = axiosInstance();
+    const response = await instance.post<ApiResponse<TData>>(
+      endPoint,
+      data,
+      options,
+    );
     return response.data;
   } catch (error) {
     console.error(`Post request to ${endPoint} failed:`, error);
@@ -44,9 +58,17 @@ const httpPost = async (endPoint: string, options?: ApiRequestOptions) => {
   }
 };
 
-const httpPut = async (endPoint: string, options?: ApiRequestOptions) => {
+const httpPut = async <TData>(
+  endPoint: string,
+  data: unknown,
+  options?: ApiRequestOptions,
+): Promise<ApiResponse<TData>> => {
   try {
-    const response = await axiosInstance().put(endPoint, options);
+    const response = await axiosInstance().put<ApiResponse<TData>>(
+      endPoint,
+      data,
+      options,
+    );
     return response.data;
   } catch (error) {
     console.error(`Put request to ${endPoint} failed:`, error);
@@ -54,9 +76,17 @@ const httpPut = async (endPoint: string, options?: ApiRequestOptions) => {
   }
 };
 
-const httpPatch = async (endPoint: string, options?: ApiRequestOptions) => {
+const httpPatch = async <TData>(
+  endPoint: string,
+  data: unknown,
+  options?: ApiRequestOptions,
+): Promise<ApiResponse<TData>> => {
   try {
-    const response = await axiosInstance().patch(endPoint, options);
+    const response = await axiosInstance().patch<ApiResponse<TData>>(
+      endPoint,
+      data,
+      options,
+    );
     return response.data;
   } catch (error) {
     console.error(`Patch request to ${endPoint} failed:`, error);
@@ -64,9 +94,15 @@ const httpPatch = async (endPoint: string, options?: ApiRequestOptions) => {
   }
 };
 
-const httpDelete = async (endPoint: string, options?: ApiRequestOptions) => {
+const httpDelete = async <TData>(
+  endPoint: string,
+  options?: ApiRequestOptions,
+): Promise<ApiResponse<TData>> => {
   try {
-    const response = await axiosInstance().delete(endPoint, options);
+    const response = await axiosInstance().delete<ApiResponse<TData>>(
+      endPoint,
+      options,
+    );
     return response.data;
   } catch (error) {
     console.error(`Delete request to ${endPoint} failed:`, error);
