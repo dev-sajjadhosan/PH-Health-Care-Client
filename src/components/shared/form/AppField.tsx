@@ -27,7 +27,7 @@ type AppFieldProps = {
   className?: string;
 };
 
-const AppField = ({
+export const AppField = ({
   field,
   label,
   type = "text",
@@ -68,7 +68,7 @@ const AppField = ({
           className={cn(
             prepend && "pl-10",
             append && "pr-10",
-            hasError && "border-destructive focus-visible:ring-destructive/20",
+            hasError && "border-destructive focus-visible:ring-destructive/20 bg-transparent!",
           )}
           aria-invalid={hasError}
           aria-describedby={hasError ? `${field.name}-error` : undefined}

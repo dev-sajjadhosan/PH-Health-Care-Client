@@ -34,7 +34,7 @@ export default function RootLayout({
         <QueryProviders>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >

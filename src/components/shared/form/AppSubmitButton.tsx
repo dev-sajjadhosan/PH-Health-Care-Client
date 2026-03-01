@@ -12,7 +12,7 @@ type AppSubmitButtonProps = {
 }
 
 
-const AppSubmitButton = ({
+export const AppSubmitButton = ({
     isPending,
     children,
     pendingLabel = "Submitting...",
