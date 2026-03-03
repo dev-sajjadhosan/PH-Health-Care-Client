@@ -55,7 +55,7 @@ export const AppField = ({
       >
         {label}
       </Label>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-3 bg-accent rounded-md px-3 py-1">
         {prepend && <div className="z-10">{prepend}</div>}
         <Input
           name={field.name}
@@ -65,11 +65,12 @@ export const AppField = ({
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           disabled={disabled}
-          className={cn(
-            prepend && "pl-10",
-            append && "pr-10",
-            hasError && "border-destructive focus-visible:ring-destructive/20 bg-transparent!",
-          )}
+          // className={cn(
+          //   prepend && "pl-10",
+          //   append && "pr-10",
+          //   hasError && "border-destructive focus-visible:ring-destructive/20 ",
+          // )}
+          className="bg-transparent! border-0 "
           aria-invalid={hasError}
           aria-describedby={hasError ? `${field.name}-error` : undefined}
         />

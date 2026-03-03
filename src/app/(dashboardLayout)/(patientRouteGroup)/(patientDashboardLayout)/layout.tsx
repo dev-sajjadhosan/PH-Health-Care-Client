@@ -3,5 +3,5 @@ export default function PatientDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <div className="max-w-7xl mx-auto h-screen">{children}</div>;
 }

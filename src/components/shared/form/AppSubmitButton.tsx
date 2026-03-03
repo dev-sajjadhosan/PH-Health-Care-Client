@@ -26,7 +26,8 @@ export const AppSubmitButton = ({
   return (
     <Button 
         type='submit'
-        disabled={isDisabled} 
+        disabled={isDisabled}
+        size="xl"
         className={cn("w-full", className)}
     >
       {isPending ? (

@@ -1,22 +1,16 @@
 "use server";
 
-import {
-  getDefaultDashboardRoute,
-  isValidRedirectForRole,
-  UserRole,
-} from "@/lib/authUtils";
 import { httpClient } from "@/lib/axios/httpClient";
 import { setTokenInCookies } from "@/lib/tokenUtils";
 import { ApiErrorResponse } from "@/types/api.types";
 import { ILoginResponse } from "@/types/auth.types";
-import { loginZodSchema, TLoginZodSchema } from "@/zod/zod.validation";
+import { registerZodSchema, TRegisterZodSchema } from "@/zod/zod.validation";
 import { redirect } from "next/navigation";
 
-export const loginAction = async (
-  payload: TLoginZodSchema,
-  redirectPath?: string,
+export const registerAction = async (
+  payload: TRegisterZodSchema,
 ): Promise<ILoginResponse | ApiErrorResponse> => {
-  const parsedPayload = loginZodSchema.safeParse(payload);
+  const parsedPayload = registerZodSchema.safeParse(payload);
 
   if (!parsedPayload.success) {
     const firstError =
@@ -28,12 +22,11 @@ export const loginAction = async (
   }
   try {
     const res = await httpClient.post<ILoginResponse>(
-      "/auth/login",
+      "/auth/register",
       parsedPayload.data,
     );
 
-    const { accessToken, refreshToken, token, user } = res.data;
-    const { needPasswordChange, emailVerified, email, role } = user;
+    const { accessToken, refreshToken, token } = res.data;
 
     console.log({ accessToken, refreshToken, token });
 
@@ -41,19 +34,7 @@ export const loginAction = async (
     await setTokenInCookies("refreshToken", refreshToken);
     await setTokenInCookies("better-auth.session_token", token);
 
-    if (!emailVerified) {
-      redirect(`/verify-email`);
-    } else if (needPasswordChange) {
-      //TODO: Refactaring
-      redirect(`/reset-password?email=${email}`);
-    } else {
-      const targetPath =
-        redirectPath && isValidRedirectForRole(role as UserRole, redirectPath)
-          ? redirectPath
-          : getDefaultDashboardRoute(role as UserRole);
-
-      redirect(targetPath);
-    }
+    redirect("/dashboard");
   } catch (error) {
     if (
       error &&
@@ -66,7 +47,7 @@ export const loginAction = async (
     }
     return {
       success: false,
-      message: `Login failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      message: `Registration failed: ${error instanceof Error ? error.message : "Unknown error"}`,
     };
   }
 };

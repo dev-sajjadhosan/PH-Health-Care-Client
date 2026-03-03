@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { loginAction } from "@/app/(commonLayout)/(authRouteGroup)/login/_action";
+import { registerAction } from "@/app/(commonLayout)/(authRouteGroup)/register/_action";
 import { AppField } from "@/components/shared/form/AppField";
 
 import AppSubmitButton from "@/components/shared/form/AppSubmitButton";
@@ -14,25 +14,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TLoginZodSchema, loginZodSchema } from "@/zod/zod.validation";
+import { Checkbox } from "@/components/ui/checkbox";
+import { TRegisterZodSchema, registerZodSchema } from "@/zod/zod.validation";
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, LogIn } from "lucide-react";
+import { Eye, EyeOff, UserPlus2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
+const RegisterForm = () => {
   // const queryClient = useQueryClient();
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: TLoginZodSchema) => loginAction(payload, redirectPath),
+    mutationFn: (payload: TRegisterZodSchema) => registerAction(payload),
   });
 
   const form = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -45,22 +47,21 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
         // console.log(result);
 
         if (!result.success) {
-          setServerError(result.message || "Login failed");
+          setServerError(result.message || "Registration failed");
           return;
         }
-
       } catch (error: any) {
-        console.log(`Login failed: ${error.message}`);
-        setServerError(`Login failed: ${error.message}`);
+        console.log(`Registration failed: ${error.message}`);
+        setServerError(`Registration failed: ${error.message}`);
       }
     },
   });
   return (
     <Card className="w-full max-w-lg mx-auto shadow-accent rounded-2xl">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Welcome Back!</CardTitle>
+        <CardTitle className="text-2xl font-bold">Welcome!</CardTitle>
         <CardDescription>
-          Please enter your credentials to log in.
+          Please enter your credentials to register.
         </CardDescription>
       </CardHeader>
 
@@ -77,8 +78,21 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
           className="space-y-4"
         >
           <form.Field
+            name="name"
+            validators={{ onChange: registerZodSchema.shape.name }}
+          >
+            {(field) => (
+              <AppField
+                field={field}
+                label="Name"
+                type="text"
+                placeholder="Enter your name"
+              />
+            )}
+          </form.Field>
+          <form.Field
             name="email"
-            validators={{ onChange: loginZodSchema.shape.email }}
+            validators={{ onChange: registerZodSchema.shape.email }}
           >
             {(field) => (
               <AppField
@@ -92,7 +106,7 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
 
           <form.Field
             name="password"
-            validators={{ onChange: loginZodSchema.shape.password }}
+            validators={{ onChange: registerZodSchema.shape.password }}
           >
             {(field) => (
               <AppField
@@ -121,13 +135,26 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
             )}
           </form.Field>
 
-          <div className="text-right mt-2">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-primary hover:underline underline-offset-4"
-            >
-              Forgot password?
-            </Link>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Checkbox id="terms-and-conditions" />
+              <label
+                htmlFor="terms-and-conditions"
+                className="flex items-center gap-2 cursor-pointer pointer-events-none"
+              >
+                Accept Terms and Conditions
+              </label>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox id="remember-me" />
+              <label
+                htmlFor="remember-me"
+                className="flex items-center gap-2 cursor-pointer pointer-events-none"
+              >
+                Remember me
+              </label>
+            </div>
           </div>
 
           {serverError && (
@@ -142,11 +169,11 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
             {([canSubmit, isSubmitting]) => (
               <AppSubmitButton
                 isPending={isSubmitting || isPending}
-                pendingLabel="Logging In...."
+                pendingLabel="Registering...."
                 disabled={!canSubmit}
               >
-                Log In
-                <LogIn />
+                Register
+                <UserPlus2 />
               </AppSubmitButton>
             )}
           </form.Subscribe>
@@ -196,12 +223,12 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
 
       <CardFooter className="justify-center border-t pt-4">
         <p className="text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/register"
+            href="/login"
             className="text-primary font-medium hover:underline underline-offset-4"
           >
-            Create an account
+            Login
           </Link>
         </p>
       </CardFooter>
@@ -209,4 +236,4 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
