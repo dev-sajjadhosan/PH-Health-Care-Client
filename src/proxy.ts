@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from "./lib/authUtils";
 import { jwtUtils } from "./lib/jwtUtils";
 import { isTokenExpiringSoon } from "./lib/tokenUtils";
-import { getNewTokenWithRefreshToken, getUserInfo } from "./services/auth.services";
+import { getNewTokensWithRefreshToken, getUserInfo } from "./services/auth.services";
 
 async function refreshTokenMiddleware (refreshToken : string) : Promise<boolean> {
     try {
-        const refresh = await getNewTokenWithRefreshToken(refreshToken);
+        const refresh = await getNewTokensWithRefreshToken(refreshToken);
         if(!refresh){
             return false;
         }
