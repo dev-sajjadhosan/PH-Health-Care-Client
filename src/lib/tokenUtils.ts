@@ -1,14 +1,14 @@
 "use server";
+
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { setCookie } from "./cookieUtils";
 
-const getTokenSecondsRemaining = (token: string) => {
+const getTokenSecondsRemaining = (token: string): number => {
   if (!token) return 0;
-
   try {
-    const tokenPayload: JwtPayload = jwt.decode(token) as JwtPayload;
+    const tokenPayload = jwt.decode(token) as JwtPayload;
 
-    if (!tokenPayload || !tokenPayload.exp) {
+    if (tokenPayload && !tokenPayload.exp) {
       return 0;
     }
 
@@ -17,7 +17,7 @@ const getTokenSecondsRemaining = (token: string) => {
 
     return remainingSeconds > 0 ? remainingSeconds : 0;
   } catch (error) {
-    console.log(error);
+    console.error("Error decoding token:", error);
     return 0;
   }
 };
@@ -25,27 +25,26 @@ const getTokenSecondsRemaining = (token: string) => {
 export const setTokenInCookies = async (
   name: string,
   token: string,
-  fallbackMaxAge: number = 60 * 60 * 24,
+  fallbackMaxAgeInSeconds = 60 * 60 * 24, // 1 days
 ) => {
-  let maxAge;
+  let maxAgeInSeconds;
 
   if (name !== "better-auth.session_token") {
-    maxAge = getTokenSecondsRemaining(token);
+    maxAgeInSeconds = getTokenSecondsRemaining(token);
   }
 
-  await setCookie(name, token, maxAge || fallbackMaxAge);
+  await setCookie(name, token, maxAgeInSeconds || fallbackMaxAgeInSeconds);
 };
 
-export const isTokenExpiringSoon = async (
+export async function isTokenExpiringSoon(
   token: string,
-  thresholdSeconds: number = 300,
-): Promise<boolean> => {
+  thresholdInSeconds = 300,
+): Promise<boolean> {
   const remainingSeconds = getTokenSecondsRemaining(token);
-  return remainingSeconds > 0 && remainingSeconds <= thresholdSeconds;
-};
+  return remainingSeconds > 0 && remainingSeconds <= thresholdInSeconds;
+}
 
-
-export const isTokenExpired = async (token: string): Promise<boolean> => {
+export async function isTokenExpired(token: string): Promise<boolean> {
   const remainingSeconds = getTokenSecondsRemaining(token);
   return remainingSeconds === 0;
-};
+}
