@@ -10,15 +10,18 @@ import {
 export default async function AdminDashboardPage() {
   const queryClient = new QueryClient();
 
-  await queryClient.fetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: ["admin-dashboard-data"],
     queryFn: getDashboardData,
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    
   });
 
-  const dashboardData = queryClient.getQueryData([
-    "admin-dashboard-data",
-  ]) as IAdminDashboardData;
-  console.log(dashboardData, "Dashboard data fetched successfully");
+  // const dashboardData = queryClient.getQueryData([
+  //   "admin-dashboard-data",
+  // ]) as IAdminDashboardData;
+  // console.log(dashboardData, "Dashboard data fetched successfully");
 
   return (
     <>

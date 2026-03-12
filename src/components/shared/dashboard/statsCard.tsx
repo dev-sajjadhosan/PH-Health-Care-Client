@@ -6,7 +6,7 @@ import { createElement } from "react";
 interface StatsCardProps {
   title: string;
   value: string | number;
-  icon?: string;
+  iconName?: string;
   description?: string;
   className?: string;
 }
@@ -14,18 +14,18 @@ interface StatsCardProps {
 export const StatsCard = ({
   title,
   value,
-  icon,
+  iconName,
   description,
   className,
 }: StatsCardProps) => {
   return (
-    <Card className={cn("hover:shadow-md transition-shadow", className)}>
+    <Card className={cn("hover:shadow-md transition-shadow w-full", className)}>
       <CardHeader className="flex items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <div className="flex items-center gap-2">
-          {icon && (
+          {iconName && (
             <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center">
-              {createElement(getIconComponent(icon), { className: "w-5 h-5" })}
+              {createElement(getIconComponent(iconName), { className: "w-5 h-5" })}
             </div>
           )}
         </div>

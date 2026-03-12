@@ -25,7 +25,7 @@ interface AppointmentBarChartProps {
 const AppointmentBarChart = ({ data }: AppointmentBarChartProps) => {
   if (!data || !Array.isArray(data)) {
     return (
-      <Card className="col-span-4">
+      <Card className="col-span-4 w-full">
         <CardHeader>
           <CardTitle>Appointment Trends</CardTitle>
           <CardDescription>Monthly Appointment Statistics</CardDescription>
@@ -53,7 +53,7 @@ const AppointmentBarChart = ({ data }: AppointmentBarChartProps) => {
     formattedData.every((item) => item.appointments === 0)
   ) {
     return (
-      <Card className="col-span-4">
+      <Card className="col-span-4 w-full">
         <CardHeader>
           <CardTitle>Appointment Trends</CardTitle>
           <CardDescription>Monthly Appointment Statistics</CardDescription>
