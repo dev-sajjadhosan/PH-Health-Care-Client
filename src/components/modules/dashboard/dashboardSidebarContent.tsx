@@ -7,6 +7,7 @@ import { getIconComponent } from "@/lib/iconMapper";
 import { cn } from "@/lib/utils";
 import { NavSection } from "@/types/dashboard.types";
 import { UserInfo } from "@/types/user.types";
+import { LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -25,11 +26,14 @@ const DashboardSidebarContent = ({
   return (
     <div className="hidden md:flex h-full w-full flex-col border-r bg-card overflow-y-auto">
       {/* Logo / Brand */}
-      <div className="flex h-16 items-center border-b px-6">
-        <Link href={dashboardHome}>
-          <span className="text-xl font-bold text-primary">PH Healthcare</span>
-        </Link>
-      </div>
+      <Link href={dashboardHome}>
+        <div className="flex h-18 items-center border-b px-6 gap-2">
+          <LayoutDashboard />
+          <p className="text-xl font-semibold font-mono text-primary">
+            PH Healthcare
+          </p>
+        </div>
+      </Link>
 
       {/* Navigation Area */}
       <ScrollArea className="flex-1 px-3 py-4">

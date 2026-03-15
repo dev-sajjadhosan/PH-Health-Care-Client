@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import {
@@ -19,38 +20,36 @@ export const loginAction = async (
   const parsedPayload = loginZodSchema.safeParse(payload);
 
   if (!parsedPayload.success) {
-    const firstError =
-      parsedPayload.error.issues[0].message || "Invalid credentials";
+    const firstError = parsedPayload.error.issues[0].message || "Invalid input";
     return {
       success: false,
       message: firstError,
     };
   }
   try {
-    const res = await httpClient.post<ILoginResponse>(
+    const response = await httpClient.post<ILoginResponse>(
       "/auth/login",
       parsedPayload.data,
     );
 
-    const { accessToken, refreshToken, token, user } = res.data;
-    const { needPasswordChange, emailVerified, email, role } = user;
+    const { accessToken, refreshToken, token, user } = response.data;
 
-    console.log({ accessToken, refreshToken, token });
-
+    const { role, emailVerified, needPasswordChange, email } = user;
     await setTokenInCookies("accessToken", accessToken);
     await setTokenInCookies("refreshToken", refreshToken);
-    await setTokenInCookies("better-auth.session_token", token);
+    await setTokenInCookies("better-auth.session_token", token, 24 * 60 * 60); // 1 day in seconds
 
-    // if (!emailVerified) {
-    //   redirect(`/verify-email`);
-    // } else
+    // if(!emailVerified){
+    //     redirect("/verify-email");
+    // }else // in the catch block
 
     if (needPasswordChange) {
-      //TODO: Refactaring
+      //TODO : refactoring
       redirect(`/reset-password?email=${email}`);
     } else {
+      // redirect(redirectPath || "/dashboard");
       const targetPath =
-        redirectPath && isValidRedirectForRole(role as UserRole, redirectPath)
+        redirectPath && isValidRedirectForRole(redirectPath, role as UserRole)
           ? redirectPath
           : getDefaultDashboardRoute(role as UserRole);
 
@@ -66,6 +65,7 @@ export const loginAction = async (
     ) {
       throw error;
     }
+
     if (
       error &&
       error.response &&
@@ -75,7 +75,7 @@ export const loginAction = async (
     }
     return {
       success: false,
-      message: `Login failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      message: `Login failed: ${error.message}`,
     };
   }
 };

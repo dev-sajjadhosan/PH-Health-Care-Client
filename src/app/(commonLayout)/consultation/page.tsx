@@ -1,4 +1,4 @@
-import { getDoctors } from "@/app/(commonLayout)/consultation/_action";
+import { getDoctors } from "@/services/doctor.services";
 import DoctorsList from "@/components/modules/consultation/doctorsList";
 import {
   dehydrate,

@@ -15,20 +15,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TLoginZodSchema, loginZodSchema } from "@/zod/zod.validation";
+
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, LogIn } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
+interface LoginFormProps {
+  redirectPath?: string;
+}
+
+const LoginForm = ({ redirectPath }: LoginFormProps) => {
   // const queryClient = useQueryClient();
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: TLoginZodSchema) => loginAction(payload, redirectPath),
+    mutationFn: (payload: TLoginZodSchema) =>
+      loginAction(payload, redirectPath),
   });
 
   const form = useForm({
@@ -42,13 +48,10 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
       try {
         const result = (await mutateAsync(value)) as any;
 
-        // console.log(result);
-
         if (!result.success) {
           setServerError(result.message || "Login failed");
           return;
         }
-
       } catch (error: any) {
         console.log(`Login failed: ${error.message}`);
         setServerError(`Login failed: ${error.message}`);
@@ -56,7 +59,7 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
     },
   });
   return (
-    <Card className="w-full max-w-lg mx-auto shadow-accent rounded-2xl">
+    <Card className="w-full max-w-md mx-auto shadow-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Welcome Back!</CardTitle>
         <CardDescription>
@@ -146,7 +149,6 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
                 disabled={!canSubmit}
               >
                 Log In
-                <LogIn />
               </AppSubmitButton>
             )}
           </form.Subscribe>
@@ -167,7 +169,7 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
           variant="outline"
           className="w-full"
           onClick={() => {
-            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL;
             //TODO redirect path after login in frontend
             window.location.href = `${baseUrl}/auth/login/google`;
           }}
@@ -201,7 +203,7 @@ const LoginForm = ({ redirectPath }: { redirectPath?: string }) => {
             href="/register"
             className="text-primary font-medium hover:underline underline-offset-4"
           >
-            Create an account
+            Sign Up for an account
           </Link>
         </p>
       </CardFooter>

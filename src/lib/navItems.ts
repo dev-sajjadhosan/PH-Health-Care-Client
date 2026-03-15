@@ -6,7 +6,7 @@ export const getCommonNavItems = (role : UserRole) : NavSection[] => {
     const defaultDashboard = getDefaultDashboardRoute(role);
     return [
         {
-            // title : "Dashboard",
+            title : "Basic",
             items : [
                 {
                     title : "Home",
@@ -109,7 +109,7 @@ export const adminNavItems: NavSection[] = [
             },
             {
                 title: "Doctor Schedules",
-                href: "/admin/dashboard/doctor-schedules-managament",
+                href: "/admin/dashboard/doctor-schedules-management",
                 icon: "CalendarClock",
             },
             {
