@@ -22,6 +22,12 @@ const AdminDashboardContent = () => {
     <div className="space-y-7">
       <div className="flex items-center gap-5">
         <StatsCard
+          title="Total Users"
+          value={data?.userCount || 0}
+          iconName="Users"
+          description="Number of users registered"
+        />
+        <StatsCard
           title="Total Appointments"
           value={data?.appointmentCount || 0}
           iconName="CalendarDays"
@@ -30,8 +36,14 @@ const AdminDashboardContent = () => {
         <StatsCard
           title="Total Patients"
           value={data?.patientCount || 0}
-          iconName="Users"
+          iconName="User"
           description="Number of patients registered"
+        />
+        <StatsCard
+          title="Total Doctors"
+          value={data?.doctorCount || 0}
+          iconName="Stethoscope"
+          description="Number of doctors registered"
         />
       </div>
 

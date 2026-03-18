@@ -23,6 +23,7 @@ export default async function DoctorsManagementPage({
       return `${key}=${value}`;
     })
     .join("&");
+    
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -33,7 +34,8 @@ export default async function DoctorsManagementPage({
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DoctorTable queryParams={queryParams} queryString={queryString} />
+      <DoctorTable initialQueryString={queryString} />
     </HydrationBoundary>
   );
 }
+

@@ -1,4 +1,4 @@
-import { Home, LayoutDashboard, User, Settings, Calendar, Clock, FileText, Star, Shield, Stethoscope, Users, Hospital, CalendarClock, CreditCard, ClipboardList, Activity } from "lucide-react";
+import { Home, LayoutDashboard, User, Settings, Calendar, Clock, FileText, Star, Shield, Stethoscope, Users, Hospital, CalendarClock, CreditCard, ClipboardList, Activity, CalendarDays } from "lucide-react";
 
 export const getIconComponent = (iconName : string) => {
     switch (iconName) {
@@ -36,6 +36,8 @@ export const getIconComponent = (iconName : string) => {
             return ClipboardList;
         case "Activity":
             return Activity;
+        case "CalendarDays":
+            return CalendarDays;
         default:
             return Home;
     }

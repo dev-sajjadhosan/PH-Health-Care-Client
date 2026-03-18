@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { registerAction } from "@/app/(commonLayout)/(authRouteGroup)/register/_action";
-import { AppField } from "@/components/shared/form/AppField";
+import AppField from "@/components/shared/form/AppField";
 
 import AppSubmitButton from "@/components/shared/form/AppSubmitButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
